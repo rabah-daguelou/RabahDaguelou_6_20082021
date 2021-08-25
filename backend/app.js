@@ -1,14 +1,11 @@
 const express=require('express');
-
 const app=express();
-
-// Importer body-parser pour extraire les objets JSON des demandes
 const bodyParser=require('body-parser');
-// Importer Mongoose
 const mongoose= require('mongoose');
 
-// Importer le router de user
+// Importer les routers user et sauce
 const userRoutes=require('./routes/user');
+const sauceRoutes=require('./routes/sauce');
 
 //Connecter l'API à la base de donnée MongoDB
 mongoose.connect('mongodb+srv://rabah-daguelou:Rd-2311-1974@peckoko.yjtim.mongodb.net/peckoko?retryWrites=true&w=majority',
@@ -35,5 +32,6 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use('/api/auth', userRoutes);
+app.use('/api', sauceRoutes);
 
 module.exports=app;
