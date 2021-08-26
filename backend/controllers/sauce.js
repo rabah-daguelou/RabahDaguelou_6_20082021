@@ -1,18 +1,36 @@
 const Sauce = require('../models/sauce');
 
 exports.createSauce = (req, res, next) => {
+  // Le corps de la requête est une chaine de caractère
+  // transformer la chaine en objet
+  // Extraire l'objet json
+  //const sauceObject= JSON.parse (req.body);
+  console.log(res);
+  console.log(next);
+
   const sauce = new Sauce({
-    userId 	  	 : req.body.userId,
-    name 		     : req.body.name,
-    manufacturer : req.body.manufacturer,
-    description  : req.body.description,
-    mainPepper 	 : req.body.mainPepper,
-    imageUrl 	   : req.body.imageUrl,
-    heat 		     : req.body.heat,
+    
+        userId: "1", 
+        name: req.body.name, 
+        manufacturer: "Ma sauce p",
+        description: "belle",
+        mainPepper: "felefel",
+        imageUrl: "fal.jpg",
+        heat: 0,
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: []
+    
+    /*
+    //...sauceObject,
+    //Générer les segments de l'URL de l'image
+    // le protocole + nom d'hote + chemin/nom du fichier
+    imageUrl: `${req.protocol}://${req.getAllSauce('host')}/images/${req.file.filename}`,
     likes 	  	 : req.body.likes,
     dislikes 	   : req.body.dislikes,
     usersLiked 	 : req.body.usersLiked,
-    usersDisliked: req.body.usersDisliked,
+    usersDisliked: req.body.usersDisliked,*/
   });
 
   sauce.save()

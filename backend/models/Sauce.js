@@ -10,9 +10,9 @@ const sauceSchema=mongoose.Schema(
         description: String,
         mainPepper: String,
         imageUrl: String,
-        heat: String,
-        likes: String,
-        dislikes: String,
+        heat: Number,
+        likes: Number,
+        dislikes: Number,
         usersLiked: [String],
         usersDisliked: [String]
     },

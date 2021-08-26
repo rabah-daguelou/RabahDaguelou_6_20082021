@@ -1,3 +1,4 @@
+
 // Importer bcrypt
 const bcrypt=require('bcrypt');
 
@@ -13,6 +14,7 @@ const User=require('../models/User');
 
    // Middleware 1: Enregistrer les utilisateurs
    exports.signup = (req, res, next) => {
+    console.log(req.body);
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
@@ -24,7 +26,7 @@ const User=require('../models/User');
           .catch(error => res.status(400).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
-  };
+};
 
 // Connecter les utilisateurs existants dans la BDD
 
@@ -62,7 +64,7 @@ exports.login = (req, res, next) => {
             'RANDOM_TOKEN_SECRET',
             // Argument 3: Expiration du token: Configuration de session
             // Chaque token durera 24h- au-délà, il n'esst plus valable
-            {expiresIn:'24h'}
+            {expiresIn:'72h'}
           )          
         });
       })
