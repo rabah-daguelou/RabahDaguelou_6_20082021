@@ -24,7 +24,7 @@ const userSchema=mongoose.Schema(
     // Ajouter l'utilisateur dans la collection 'utilisateurs' de la BDD
     { collection : 'utilisateurs' }
 );
-
+// Appliquer le validateur au schéma avec la méthode plugin
 // Aucun user ne peut partager la même adresse e-mail
 userSchema.plugin(uniqueValidator);
 

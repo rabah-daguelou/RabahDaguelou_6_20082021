@@ -11,7 +11,8 @@ module.exports=(req,res,next)=>{
    
     try {
  // Récupérer le token dans le header authorization
- // Le tableau renvoyé possède deux éléments bear et token
+ // Le tableau renvoyé possède deux éléments bearer et token
+ // On split l'espace et 
  // On récupère le 2ème élément token
       const token=req.headers.authorization.split('')[1];
     // Décoder le token avec la fonction verify de jwt
@@ -22,7 +23,7 @@ module.exports=(req,res,next)=>{
         // Vérifier le userId
         // si le userId de la requête est différent de UserId
       if (req.body.userId && req.body.userId !== userId){
-        // Renvoyer l'erreur
+        // Envoyer une erreur
         throw 'User ID non valable!';
       } else {
         next();

@@ -1,55 +1,38 @@
-const Sauce = require('../models/sauce');
 
-exports.createSauce = (req, res, next) => {
+const Sauce = require('../models/Sauce');
+
+exports.createSauce= (req, res, next) => {
+  
   // Le corps de la requête est une chaine de caractère
   // transformer la chaine en objet
   // Extraire l'objet json
-  //const sauceObject= JSON.parse (req.body);
-  console.log(res);
-  console.log(next);
-
-  const sauce = new Sauce({
-    
-        userId: "1", 
-        name: req.body.name, 
-        manufacturer: "Ma sauce p",
-        description: "belle",
-        mainPepper: "felefel",
-        imageUrl: "fal.jpg",
-        heat: 0,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: []
-    
-    /*
-    //...sauceObject,
+ const sauceObject= JSON.parse (req.body.sauce);
+ delete sauceObject._id;
+   
+ const sauce = new Sauce({
+    ...sauceObject,
     //Générer les segments de l'URL de l'image
     // le protocole + nom d'hote + chemin/nom du fichier
     imageUrl: `${req.protocol}://${req.getAllSauce('host')}/images/${req.file.filename}`,
-    likes 	  	 : req.body.likes,
-    dislikes 	   : req.body.dislikes,
-    usersLiked 	 : req.body.usersLiked,
-    usersDisliked: req.body.usersDisliked,*/
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [' '],
+    usersDisliked: [' ']
   });
 
   sauce.save()
-  .then(
-    () => {
-      res.status(201).json({
-        message: 'Sauce enregistrée !'
-      });
-    }
-  )
-  .catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  .then(() => res.status(201).json({message: 'Sauce enregistrée !'}))
+  .catch(error => res.status(400).json({error}));
 };
 
+// Afficher toutes les sauces
+exports.getAllSauce = (req, res, next) => {
+  Sauce.find()
+  .then(sauces => res.status(200).json(sauces))
+  .catch(error => res.status(400).json({error}));
+};
+
+// Afficher la sauce choisie
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({
     _id: req.params.id
@@ -66,6 +49,7 @@ exports.getOneSauce = (req, res, next) => {
   );
 };
 
+// Modifier la sauce choisie
 exports.modifySauce = (req, res, next) => {
   const sauce = new Sauce({
     userId 	  	 : req.body.userId,
@@ -95,6 +79,7 @@ exports.modifySauce = (req, res, next) => {
   );
 };
 
+// Supprimer la sauce choisie
 exports.deleteSauce = (req, res, next) => {
   Sauce.deleteOne({_id: req.params.id}).then(
     () => {
@@ -111,17 +96,5 @@ exports.deleteSauce = (req, res, next) => {
   );
 };
 
-exports.getAllSauce = (req, res, next) => {
- Sauce.find().then(
-    (sauces) => {
-      res.status(200).json(sauces);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-};
+
 

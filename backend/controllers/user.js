@@ -1,4 +1,3 @@
-
 // Importer bcrypt
 const bcrypt=require('bcrypt');
 
@@ -12,13 +11,15 @@ const User=require('../models/User');
  // Récupérer le hash du mot de passe 
    // Enregistrer le nouveau mot de passe dans un nouveau user dans la base de donnée
 
-   // Middleware 1: Enregistrer les utilisateurs
+   // Middleware 1: Avec la fonction signup. 
+   // Enregistrer les utilisateurs
    exports.signup = (req, res, next) => {
-    console.log(req.body);
+  
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          email: req.body.email,
+         email: req.body.email,
+         //Stocker le mot de passe haché
           password: hash
         });
         user.save()
@@ -32,8 +33,10 @@ const User=require('../models/User');
 
 // Middleware 2: Connecter les utilisateurs
 exports.login = (req, res, next) => {
+
   // trouver l'utilisateur qui correspond à l'adresse email saisie
-  User.findOne({ email: req.body.email })
+  User.findOne({ email:req.body.email})
+    
   // Fonction asynchrone qui renvoie une promise
   .then(user => {
     // Renvoyer une erreur si l'utilisateur n'existe pas
@@ -51,21 +54,27 @@ exports.login = (req, res, next) => {
         if (!valid) {
           return res.status(401).json({ error: 'Ce mot de passe est incorrect !' });
         }
+        
         // True
         // Renvoyer (selon le frontend) un objet json contenant user._id et token
         res.status(200).json({
+          
           userId: user._id,
           // fonction sign de jwt avec arguments
+          
           token: jwt.sign(
             // argument 1: (payload) données à encoder
             // userId
-            { userId:user._id   },
+                  
+          { userId:user._id},
             // argument 2: La clé secrète de l'encodage
             'RANDOM_TOKEN_SECRET',
+            
+           
             // Argument 3: Expiration du token: Configuration de session
             // Chaque token durera 24h- au-délà, il n'esst plus valable
             {expiresIn:'72h'}
-          )          
+          )         
         });
       })
       
