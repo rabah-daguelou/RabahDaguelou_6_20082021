@@ -24,7 +24,7 @@ const User=require('../models/User');
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(400).json({ message:"Cette adresse mail est déjà utilisée !" }));
       })
       .catch(error => res.status(500).json({ error }));
 };
@@ -41,7 +41,7 @@ exports.login = (req, res, next) => {
   .then(user => {
     // Renvoyer une erreur si l'utilisateur n'existe pas
     if (!user) {
-      return res.status(401).json({ error: 'Utilisateur introuvable!' });
+      return res.status(401).json({error: 'Utilisateur introuvable!' });
     }
     // Renvoyer une erreur si le mot de passe est incorrect
     // Utiliser bcrypt pour comparer le mot de passe envoyé par l'utilisateur

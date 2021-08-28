@@ -51,7 +51,8 @@ exports.modifySauce = (req, res, next) => {
     // On récupère la chaine de caractère et on la parse en objet json
     ...JSON.parse(req.body.sauce),
     // On modifie l'image url
-    imageUrl: `${req.protocol}://${req.getAllSauce('host')}/images/${req.file.filename}`,
+    imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}` ,
+    
   }
   // Si y a pas de fichier on prend le corps de la reqête
     :{...req.body};
