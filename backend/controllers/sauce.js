@@ -91,8 +91,11 @@ exports.likeOrDislikeSauce = (req, res, next) => {
   let like    = req.body.like;
   let userId  = req.body.userId;
   let sauceId = req.params.id;
-  
+
+  // Etudier les trois cas 
   switch (like) {
+   
+    // Cas 1: like=1 / L'utilisateur aime la sauce
     case 1 :
         Sauce.updateOne(
           { _id: sauceId },
@@ -108,9 +111,11 @@ exports.likeOrDislikeSauce = (req, res, next) => {
             
       break;
 
+    // Cas 2: like=0 / L'utilisateur annule son choix
     case 0 :
         Sauce.findOne({ _id: sauceId })
            .then((sauce) => {
+            
             // Si userId se trouve dans le tableau [userLiked]
             if (sauce.usersLiked.includes(userId)) { 
               // On modifie la sauce via son id
@@ -141,7 +146,8 @@ exports.likeOrDislikeSauce = (req, res, next) => {
           })
           .catch((error) => res.status(404).json({ error }))
       break;
-
+    
+      // Cas 3: like=-1 / L'utilisateur n'aime pas la sauce
     case -1 :
         Sauce.updateOne(
           { _id: sauceId },
