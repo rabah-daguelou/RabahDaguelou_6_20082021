@@ -14,7 +14,7 @@ const User=require('../models/User');
    // Middleware 1: Avec la fonction signup. 
    // Enregistrer les utilisateurs
    exports.signup = (req, res, next) => {
-  
+  console.log (req.body);
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
@@ -69,11 +69,10 @@ exports.login = (req, res, next) => {
           { userId:user._id},
             // argument 2: La clé secrète de l'encodage
             'RANDOM_TOKEN_SECRET',
-            
-           
+                       
             // Argument 3: Expiration du token: Configuration de session
             // Chaque token durera 24h- au-délà, il n'esst plus valable
-            {expiresIn:'72h'}
+            {expiresIn:'24h'}
           )         
         });
       })

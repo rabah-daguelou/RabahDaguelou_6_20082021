@@ -14,10 +14,11 @@ module.exports=(req,res,next)=>{
  // Le tableau renvoyé possède deux éléments bearer et token
  // On split l'espace et 
  // On récupère le 2ème élément token
-      const token=req.headers.authorization.split('')[1];
+      const token=req.headers.authorization.split(' ')[1];
     // Décoder le token avec la fonction verify de jwt
        // 1er argument le token, le second la clé secrète donnée
-      const decodedToken= jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+      // On obtient un objet JS
+       const decodedToken= jwt.verify(token, 'RANDOM_TOKEN_SECRET');
         // Récupérer le userId se trouvant dans le token
       const userId= decodedToken.userId;
         // Vérifier le userId
@@ -28,11 +29,11 @@ module.exports=(req,res,next)=>{
       } else {
         next();
       }
-        
     }
 
     // Gérer les erreurs
     catch (error) {
+      // Renvoyer l'erreur reçue ou un message
         res.status(401).json({ error:error | 'Requête non authentifiée!'});
     }
 };

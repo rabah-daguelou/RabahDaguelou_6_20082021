@@ -16,9 +16,9 @@ const multer= require ('../middleware/multer-config');
 router.post('/sauces', multer, sauceCtrl.createSauce);
 router.get('/sauces', sauceCtrl.getAllSauce);
 router.get('/sauces/:id', sauceCtrl.getOneSauce);
-router.put('/sauces/:id', multer, sauceCtrl.modifySauce);
-router.delete('/sauces/:id', sauceCtrl.deleteSauce);
-//router.post('/sauces/:id/like', sauceCtrl.creatLikeSauce);
+router.put('/sauces/:id', auth, multer, sauceCtrl.modifySauce);
+router.delete('/sauces/:id', auth, sauceCtrl.deleteSauce);
+router.post('/sauces/:id/like', sauceCtrl.likeOrDislikeSauce);
 
 
 //app.use(bodyParser.urlencoded({ extended: false }));

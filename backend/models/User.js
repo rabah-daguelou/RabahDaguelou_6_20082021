@@ -8,14 +8,14 @@ const uniqueValidator=require('mongoose-unique-validator');
 const userSchema=mongoose.Schema(
     {
         email:{
-            type:String, 
+            type    :String, 
             required:true, 
            // Impossible de s'inscrire plusieurs fois avec la même adresse mail
-            unique:true
+            unique  :true
         },
 
         password:{
-            type:String, 
+            type    :String, 
             required:true
         },
     
