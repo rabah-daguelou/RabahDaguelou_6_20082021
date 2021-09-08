@@ -5,6 +5,8 @@ const bcrypt=require('bcrypt');
 // Package pour créer des token et de les vérifier
 const jwt=require('jsonwebtoken');
 
+// Librairie dotenv pour stocker les variables d'environnement
+require ('dotenv').config();
 const User=require('../models/User');
 
 // Hacher le mot de passe avec une fonction asynchrone
@@ -13,15 +15,17 @@ const User=require('../models/User');
 
    // Middleware 1: Avec la fonction signup. 
    // Enregistrer les utilisateurs
+
    exports.signup = (req, res, next) => {
-  console.log (req.body);
+   
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
          email: req.body.email,
          //Stocker le mot de passe haché
           password: hash
-        });
+        
+        });  
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
           .catch(error => res.status(400).json({ message:"Cette adresse mail est déjà utilisée !" }));
@@ -60,7 +64,7 @@ exports.login = (req, res, next) => {
         res.status(200).json({
           
           userId: user._id,
-          // fonction sign de jwt avec arguments
+          // fonction sign de jwt avec 3 arguments
           
           token: jwt.sign(
             // argument 1: (payload) données à encoder
@@ -68,7 +72,7 @@ exports.login = (req, res, next) => {
                   
           { userId:user._id},
             // argument 2: La clé secrète de l'encodage
-            'RANDOM_TOKEN_SECRET',
+            process.env.TokenSecret,
                        
             // Argument 3: Expiration du token: Configuration de session
             // Chaque token durera 24h- au-délà, il n'esst plus valable

@@ -3,8 +3,10 @@ const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
 const mongoose= require('mongoose');
+const helmet=require('helmet');
+require('dotenv').config();
 
-// Accéder au path du serveur
+// Accéder au path du serveur/ Les chemins de fichiers
 const path=require('path');
 
 // Importer les routers user et sauce
@@ -12,11 +14,16 @@ const userRoutes=require('./routes/user');
 const sauceRoutes=require('./routes/sauce');
 
 //Connecter l'API à la base de donnée MongoDB
-mongoose.connect('mongodb+srv://rabah-daguelou:Rd-2311-1974@peckoko.yjtim.mongodb.net/peckoko?retryWrites=true&w=majority',
+mongoose.connect(
+    process.env.DatabaseSecret,
     { useNewUrlParser: true,
-        useUnifiedTopology: true })
+      useUnifiedTopology: true }
+)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+//Utiisation de Helmet pour protéger les en-têtes http
+app.use(helmet());
 
 // Implémentation de headers
 // Le middleware s'appliquera à toutes les routes
@@ -35,6 +42,7 @@ app.use((req, res, next) => {
 // Définir la fonction json comme middleware global/ // Déprécié !!!!
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 app.use('/images', express.static(path.join(__dirname,'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api', sauceRoutes);

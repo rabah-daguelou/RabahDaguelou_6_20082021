@@ -5,6 +5,7 @@
 
 // Importer jwt pour vérifier les token
 const jwt=require('jsonwebtoken');
+require('dotenv').config();
 
 // Exporter le middleware
 module.exports=(req,res,next)=>{
@@ -18,7 +19,7 @@ module.exports=(req,res,next)=>{
     // Décoder le token avec la fonction verify de jwt
        // 1er argument le token, le second la clé secrète donnée
       // On obtient un objet JS
-       const decodedToken= jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+       const decodedToken= jwt.verify(token, process.env.TokenSecret);
         // Récupérer le userId se trouvant dans le token
       const userId= decodedToken.userId;
         // Vérifier le userId
