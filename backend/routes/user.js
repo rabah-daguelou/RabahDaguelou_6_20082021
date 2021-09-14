@@ -1,16 +1,10 @@
-// Router spécifique pour l'authentification
-
 const express = require('express');
-const emailTest=require('../middleware/emailTest')
-const passwordTest=require('../middleware/passwordTest');
-
+const checkEmail=require('../middleware/checkEmail')
+const checkPassword=require('../middleware/checkPassword');
 const router = express.Router();
-
-// Associer le controleur aux différentes routes
 const userCtrl = require('../controllers/user');
 
-// Créer les routes utilisateurs
-router.post('/signup', emailTest, passwordTest, userCtrl.signup);
+router.post('/signup', checkEmail, checkPassword, userCtrl.signup);
 router.post('/login', userCtrl.login);
 
 module.exports = router;

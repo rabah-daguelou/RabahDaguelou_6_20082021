@@ -1,23 +1,13 @@
 
 const Sauce = require('../models/Sauce');
-//File System ( Accéder aux opérations liées au système de fichiers)
-// Utilisé pour supprimer les fichiers images
 const fs= require('fs');
 
-// 1- AJOUTER UNE SAUCE
+
 exports.createSauce= (req, res, next) => {
-  
-  // Le corps de la requête est une chaine de caractère
-  // transformer la chaine en objet
-  // Extraire l'objet json
   const sauceObject= JSON.parse (req.body.sauce);
-  // Supprimer l'id envoyé par le frontend
   delete sauceObject._id;
-  // Créer une nouvelle instance du modèle sauce 
- const sauce = new Sauce({
-   ...sauceObject,
-    //Générer les segments de l'URL de l'image
-    // le protocole + nom d'hote + chemin/nom du fichier
+  const sauce = new Sauce({
+    ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     likes: 0,
     dislikes: 0,
@@ -25,40 +15,31 @@ exports.createSauce= (req, res, next) => {
     usersDisliked: [' ']
   });
 
-// La méthode save enregistre sauce dnas la bdd et renvoie une promise
 sauce.save()
   .then(() => res.status(201).json({message: 'Sauce enregistrée !'}))
   .catch(error => res.status(400).json({error}));
 };
 
-// 2- AFFICHER TOUTES LES SAUCES
 exports.getAllSauce = (req, res, next) => {
   Sauce.find()
   .then(sauces => res.status(200).json(sauces))
   .catch(error => res.status(400).json({error}));
 };
 
-// 3- AFFICHER LA SAUCE CHOISIE VIA SON ID
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({_id: req.params.id})
   .then(sauce => res.status(200).json(sauce))
   .catch(error => res.status(404).json({error}));
 };
 
-// 4- MODIFIER LA SAUCE CHOISIE
 exports.modifySauce = (req, res, next) => {
-  // S'il y a un fichier 
   const sauceObject=req.file ?
   {
-    // On récupère la chaine de caractère et on la parse en objet json
     ...JSON.parse(req.body.sauce),
-    // On modifie l'image url
     imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}` ,
-    
   }
-  // S'il n'y a pas de fichier on prend le corps de la reqête
     :{...req.body};
-  // On modifie l'id
+  
   Sauce.updateOne(
     {_id: req.params.id}, {...sauceObject, _id: req.params.id}
   )
@@ -94,8 +75,7 @@ exports.likeOrDislikeSauce = (req, res, next) => {
 
   // Etudier les trois cas 
   switch (like) {
-   
-    // Cas 1: like=1 / L'utilisateur aime la sauce
+      // Cas 1: like=1 / L'utilisateur aime la sauce
     case 1 :
         Sauce.updateOne(
           { _id: sauceId },

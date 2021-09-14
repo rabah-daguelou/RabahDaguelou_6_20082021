@@ -6,43 +6,29 @@ const mongoose= require('mongoose');
 const helmet=require('helmet');
 require('dotenv').config();
 
-// Accéder au path du serveur/ Les chemins de fichiers
 const path=require('path');
-
-// Importer les routers user et sauce
 const userRoutes=require('./routes/user');
 const sauceRoutes=require('./routes/sauce');
 
-//Connecter l'API à la base de donnée MongoDB
 mongoose.connect(
-    process.env.DatabaseSecret,
-    { useNewUrlParser: true,
-      useUnifiedTopology: true }
+  process.env.DatabaseUrl,
+  { useNewUrlParser: true,
+  useUnifiedTopology: true }
 )
-    .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-//Utiisation de Helmet pour protéger les en-têtes http
 app.use(helmet());
-
-// Implémentation de headers
-// Le middleware s'appliquera à toutes les routes
 app.use((req, res, next) => {
 
-    // Accéder à l'api depuis n'importe quelle origine
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    // Ajouter des headers aux requettes envoyées vers l'api
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    // Envoyer des requêtes ( GET, POST,...)
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-// fin headers
 
-// Définir la fonction json comme middleware global/ // Déprécié !!!!
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use('/images', express.static(path.join(__dirname,'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api', sauceRoutes);
